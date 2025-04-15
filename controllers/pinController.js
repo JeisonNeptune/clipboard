@@ -1,13 +1,21 @@
 const Pin = require('../models/Pin');
+const Board = require("../models/Board");
 
 const createPin = async (req, res) => {
   try {
     const pin = await Pin.create(req.body);
+
+    // 🔁 Push the new pin into the board's `pins` array
+    await Board.findByIdAndUpdate(pin.boardId, {
+      $push: { pins: pin._id }
+    });
+
     res.status(201).json(pin);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
+
 
 const getPins = async (req, res) => {
   try {
