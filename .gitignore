@@ -1,0 +1,6 @@
+node_modules/
+.env
+clipboard-frontend/node_modules/
+clipboard-frontend/.env
+dist/
+build/
