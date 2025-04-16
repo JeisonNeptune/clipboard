@@ -35,5 +35,18 @@ const getPinById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const deletePin = async (req, res) => {
+  try {
+    const pin = await Pin.findByIdAndDelete(req.params.id);
+    if (pin) {
+      await Board.findByIdAndUpdate(pin.boardId, {
+        $pull: { pins: pin._id }
+      });
+    }
+    res.status(200).json({ message: "Pin deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
-module.exports = { createPin, getPins, getPinById };
+module.exports = { createPin, getPins, getPinById, deletePin };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import PinCard from "../components/PinCard";
+import { Link } from "react-router-dom";
 
 const BoardDetail = () => {
   const { id } = useParams(); // board ID from URL
@@ -40,10 +41,19 @@ const BoardDetail = () => {
     }
   };
 
+  const handleDeletePin = (id) => {
+    setPins((prev) => prev.filter((pin) => pin._id !== id));
+  };
+
   return (
     <div className="max-w-5xl mx-auto py-8 px-4">
       {board ? (
         <>
+          <Link
+            to="/"
+            className="inline-block mb-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"          >
+            ← Back to Boards
+          </Link>
           <h1 className="text-3xl font-bold mb-2">{board.title}</h1>
           <p className="text-gray-700 mb-6">{board.description}</p>
 
@@ -108,16 +118,13 @@ const BoardDetail = () => {
 
           {/* Pins */}
           <div>
-              <div className="flex flex-wrap gap-6 justify-between">
-                {pins.map((pin) => (
-                  <div
-                    key={pin._id}
-                    className="w-full sm:w-[48%] lg:w-[48%] bg-green-100"
-                  >
-                    <PinCard pin={pin} />
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-wrap gap-6 justify-center">
+              {pins.map((pin) => (
+                <div key={pin._id} className="w-full sm:w-[48%] max-w-[600px]">
+                  <PinCard pin={pin} onDelete={handleDeletePin} />
+                </div>
+              ))}
+            </div>
           </div>
         </>
       ) : (
